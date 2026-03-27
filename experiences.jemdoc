@@ -1,22 +1,44 @@
 # jemdoc: menu{MENU}{experiences.html}, nofooter
 == Experiences
 
-== Working Experience
-# Add entries like this later:
-# - Title, Organization, Location, Dates \n
-#   Short 1–3 sentence description of what you did (impact + tools + outcome). \n
-#
-# Example format (leave commented until you fill in):
-# - Research Assistant, UC San Diego Economics Dept., San Diego, CA, Sep. 2024 - Present \n
-#   Worked on ... using ...; produced ...; collaborated with ... \n
+=== Research
+==== Undergraduate Research Assistant, [https://economics.ucsd.edu/undergraduate-program/resources/undergraduate-graduate-research-lab/index.html UCSD Undergraduate-Graduate Economics Research Lab] (Jan. 2024 - Present)
+Supervisor: [https://www.philiphoxie.com/ Philip Hoxie]
 
-== Research Experience
-# Add your research roles here later (RA, thesis, lab projects, etc.)
+Food Aid Project (Currently in progress)
+- Worked with another undergrad RA to clean datasets consisted of food aid delivery predictors of USAID using R.
+- Imputing missing values and creating data quality flags in the following datasets and aggregating to the country level.
+-- EM-DAT, The international disaster database
+-- Freedom In the World Indexes.
+-- OECD weather data.
+- Applied a series of machine learning models including LASSO and OLS to predict the amount of food aid delivered to foreign countries.
+- Engaged in collaborative programming workflows, using Dropbox to manage shared code, synchronize changes, and support team-based development.
 
-== Teaching Experience
-# Add teaching roles here later (TA/tutor/grader). Example format:
-# - Undergraduate Instructional Assistant (IA), ECON 120B Econometrics, UCSD, Winter 2025 \n
-#   Held discussion sections, created review materials, and supported students with R/Stata problem sets. \n
+Unified Agenda Project
+- Collaborated with another undergrad RA to fix corrupted XML files to complete a graph that previously had missing entries.
+- Used *Xmplify* (a web-downloaded app) to validate malformed XML files and identify errors within.
+- Learned to work collaboratively effectively with pre-existing file structure and code.
 
-== Leadership & Service
-# Optional section for clubs, committees, volunteering, conference reviews, etc.
+Crop Time-Series Project
+- Constructed a time-series dataset consisted of more than 50 years of crop production data in the US.
+- Used R to apply time-series methods, testing for stationarity, structural breaks and plotting graphs.
+
+=== Teaching 
+==== Undergraduate Instructional Assistant, [https://economics.ucsd.edu/undergraduate-program/resources/opportunities-for-our-majors/undergrad-teaching-assistantships.html UC San Diego, Department of Economics] (Sep. 24 - Mar. 25)
+- Facilitated the instruction of Intermediate Microeconomics (100B), Econometrics (120B) and Stata coding.
+- Performed regular academic duties such as exam proctoring, grading and responding to student inquiries. 
+- Led 3 office hours per week and a 2-hour review session before midterms to support student's learning.
+
+==== Group-Session Tutor, Reader/ Grader, [https://math.ucsd.edu/about/employment/undergraduate UC San Diego, Department of Mathematics] (Mar 25 - Mar 26)
+- Graded more than 300 weekly Probability homework and Exam papers
+- Taught courses ranging from Pre-Calculus, Calculus, Linear Algebra, and Probability.
+- Facilitated the instructional team with exam grading, proctoring and organizing weekly office hours (2 hours per week).
+
+**For more details, please see my [teaching.html teaching page].**
+
+=== Others
+==== Agricultural Bank of China (Hong Kong Branch) (Jul 24 - Aug 24)
+- Supervised by the credit department staff and gained proficiency towards the fundamental process of issuing loans, such as drafting credit proposals and researching company performance statistics\\
+- Analysed more than 60 credit proposals to monitor the client's credit score and overall performance
+- Conducted research on government policy changes on various clients and evaluate their repayment abilities.
+
