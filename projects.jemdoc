@@ -2,12 +2,33 @@
 == Projects
 
 === Undergraduate Projects
+{{<div style="margin-bottom:30px;">}}
 
-1. [https://github.com/zhaominghao1/A_Dynamical_Analysis_of_College_Admissions College Admissions and Replicator Dynamics (UCSD MATH 111A)]
+[https://github.com/zhaominghao1/A_Dynamical_Analysis_of_College_Admissions/tree/main College Admissions and Replicator Dynamics (UCSD MATH 111A)]
 
-2. [https://github.com/zhaominghao1/An_Empirical_Study_of_Monetary_Policy_on_Wyoming_State An Empirical Study of Monetary Policy on Wyoming State (UCSD ECON 112)]
+- {{<a href="javascript:void(0);" onclick="var x=document.getElementById('cad-abs'); x.style.display=(x.style.display==='none'||x.style.display==='')?'block':'none';">Abstract</a>}}
+  {{<div id="cad-abs" style="display:none; margin-top:6px; max-width:700px; line-height:1.5;">}}
+  In this project 1, we examine the college admission process through mathematical
+    modeling and game theory. Unlike the classic Gale-Shapley stable matching algorithm described in Roth 1985, which provides a static one-time solution, we explore how colleges dynamically adapt their admission strategies over time based on the outcomes of previous application cycles. Using a simplified model involving two colleges and a continuous population of students, we apply replicator dynamics to capture the evolution of strategic preferences in a competitive environment. The model is governed by a system of ordinary differential equations, where the frequency of a college’s strategy increases if its payoff exceeds the average. We analyze the resulting dynamics and investigate conditions under which strategies stabilize or fluctuate. This framework provides insight into how institutional behavior in college admissions may shift over time in response to competition, perceived utility, and feedback from earlier cycles. Our findings suggest that even in a simplified system, dynamic strategy adjustment can lead to nontrivial long-term patterns that mirror real world behavior.
+  {{</div>}}
+{{</div>}}
 
-3. [https://github.com/zhaominghao1/US_Total_Wealth_Prediction_Project US Total Wealth Prediction (UCSD ECON 178)]
+{{<div style="margin-bottom:30px;">}}
+
+[https://github.com/zhaominghao1/An_Empirical_Study_of_Monetary_Policy_on_Wyoming_State An Empirical Study of Monetary Policy on Wyoming State (UCSD ECON 112)]
+
+In this project, we tried to identify if there was a causal relationship between monetary policy on various economic activity indicators. We started from a time-series dataset with the Federal Funds Rate, unemployment rate and real GDP growth rate of Wyoming State, and used vector autoregression and analysing impulse response functions to determine the degree of causality between the above variables. 
+
+To perform our we utilized R codes to perform time-series metrics, including but not limited to data visualization, plotting time-series graphs, impulse response functions, implementing various time-series models (Moving averages and autoregressive models), and vector autoregression.
+{{</div>}}
+
+{{<div style="margin-bottom:30px;">}}
+
+[https://github.com/zhaominghao1/US_Total_Wealth_Prediction_Project US Total Wealth Prediction (UCSD ECON 178)]
+
+I was provided with a large dataset with over 7000 observations containing 17 variables that serve as predictors of total wealth, I utilized R programming to come up with 5 statistical learning models to predict the total wealth of each US individual. The models include OLS, Ridge regression, Lasso regression, polynomial regression, forward and backward stepwise selection and used techniques such as cross validation (both regular and K-folds CV) to compare predictability of the models
+{{</div>}}
+
 
 
 
