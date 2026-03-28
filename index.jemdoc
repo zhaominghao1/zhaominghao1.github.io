@@ -5,7 +5,7 @@
 {}{img_left}{photos/ryan.jpg}{Ryan Minghao Zhao}{240px}{}
 Ryan Minghao Zhao \n
 Fourth-Year Undergraduate, UC San Diego \n
-Email: rmzhao@ucsd.edu \n
+Email: rmzhao[at]ucsd.edu \n
 [CV.pdf CV] · [https://github.com/zhaominghao1 GitHub] \n
 ~~~
 
@@ -25,6 +25,12 @@ build a career involving rigorous academic research and
 teaching in the near future.
 
 Outside of research, I love exploring hiking trails and visiting national parks.
+
+== Skills
+Programming languages: R, Stata, Python, Java, MATLAB, {{L<sup>A</sup>T<sub>E</sub>X}}, GitHub
+
+Packages: ggplot2, dplyr, tidyverse, tidyr, cv, fixest, NumPy, pandas, Matplotlib, Seaborn
+
 
 == Education
 - *University of California San Diego* \n
