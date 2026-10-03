@@ -1,16 +1,18 @@
 # jemdoc: menu{MENU}{misc.html}, nofooter
 == What I am currently up to
 
-I will be graduating from UCSD in June with a B.S. in Applied Mathematics and B.A. in Economics, and I will be heading to UCLA for a predoc fellowship afterwards.
+I graduated from UCSD in June with a B.S. in Applied Mathematics and B.A. in Economics. I am currently at UCLA Anderson doing what I love, LEARNING!
 
-== My resources
+== Fun resources
 
-Below are the resources I find helpful in my learning including notes, research papers and textbooks. 
-
-And yes, I have either finished reading or is in the process! I don't post things I have NEVER read, this site also encourages me to READ more, something I wish I started earlier in undergrad. Hopefully the list gets longer and longer.
-
-*Machine Learning*
+*Reinforcement Learning*
 - S. Zhao. Mathematical Foundations of Reinforcement Learning. Springer Press, 2025. [https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning pdf]
+
+*Diffusion*
+- Peter Holderrieth and Ezra Erives. Introduction to flow matching and diffusion models, 2026.
+[https://diffusion.csail.mit.edu/ URL].
+
+
 
 
 
