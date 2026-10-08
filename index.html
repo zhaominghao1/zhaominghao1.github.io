@@ -28,6 +28,78 @@
 Email: ryan.zhao@anderson.ucla.edu <br />
 <a href="CV.pdf">CV</a> · <a href="https://github.com/zhaominghao1">GitHub</a> <br /></p>
 </td></tr></table>
+<!-- Visitor counter. Totals are kept by the free Abacus counting API (https://abacus.jasoncameron.dev).
+     Owner mode: open the page once with ?owner=on in each browser you use and your visits are no longer
+     counted there (?owner=off undoes it). Previews from file:// or localhost are never counted. -->
+<p id="visitor-counter" style="visibility:hidden">Welcome! You are the <span id="visitor-count" style="display:inline-block;background:#000;color:#0f0;font-family:'Courier New',Courier,monospace;font-weight:bold;letter-spacing:0.15em;padding:0 0.35em;border:1px solid #666;vertical-align:middle">000000</span><span id="visitor-suffix">-th</span> visitor since Oct. 7th, 2026.<span id="visitor-note" style="color:#999;font-size:small"></span></p>
+<script type="text/javascript">
+//<![CDATA[
+(function () {
+  var API = 'https://abacus.jasoncameron.dev';
+  var NAMESPACE = 'zhaominghao1.github.io';
+  var KEY = 'visitors';
+  var OWNER_FLAG = 'visitorCounterOwner';      // localStorage: marks the owner's browsers
+  var SESSION_NUMBER = 'visitorCounterNumber'; // sessionStorage: number already given to this visitor
+
+  var line = document.getElementById('visitor-counter');
+  var digits = document.getElementById('visitor-count');
+  var suffix = document.getElementById('visitor-suffix');
+  var note = document.getElementById('visitor-note');
+
+  function load(area, name) { try { return window[area].getItem(name); } catch (e) { return null; } }
+  function save(area, name, value) {
+    try { if (value === null) { window[area].removeItem(name); } else { window[area].setItem(name, value); } } catch (e) {}
+  }
+
+  // Owner mode: ?owner=on remembers this browser as the owner's, ?owner=off forgets it.
+  var m = /[?&]owner=([^&#]*)/.exec(window.location.search);
+  if (m) {
+    var v = decodeURIComponent(m[1]).toLowerCase();
+    if (v === 'on' || v === '1' || v === 'yes' || v === 'true') { save('localStorage', OWNER_FLAG, '1'); }
+    else if (v === 'off' || v === '0' || v === 'no' || v === 'false') { save('localStorage', OWNER_FLAG, null); }
+    try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {}
+  }
+  var isLocal = window.location.protocol === 'file:' ||
+                /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
+  var isOwner = isLocal || load('localStorage', OWNER_FLAG) === '1';
+
+  function pad6(n) { var s = String(n); while (s.length < 6) { s = '0' + s; } return s; }
+  function ordinal(n) {
+    var r = n % 100;
+    if (r >= 11 && r <= 13) { return '-th'; }
+    switch (n % 10) { case 1: return '-st'; case 2: return '-nd'; case 3: return '-rd'; default: return '-th'; }
+  }
+  function show(n) {
+    digits.textContent = pad6(n);
+    suffix.textContent = ordinal(n);
+    if (isOwner) { note.textContent = ' (owner mode: this visit is not counted)'; }
+    line.style.visibility = 'visible';
+  }
+
+  // A visitor keeps the same number for the whole browser session, so reloads are not counted again.
+  var remembered = isOwner ? 0 : parseInt(load('sessionStorage', SESSION_NUMBER), 10);
+  if (remembered > 0) { show(remembered); return; }
+
+  // /hit adds one and returns the new total; /get (owner mode) only reads the current total.
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', API + (isOwner ? '/get/' : '/hit/') + NAMESPACE + '/' + KEY, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState !== 4) { return; }
+    if (xhr.status === 200) {
+      var n = null;
+      try { n = JSON.parse(xhr.responseText).value; } catch (e) {}
+      if (typeof n === 'number' && n >= 0) {
+        if (!isOwner) { save('sessionStorage', SESSION_NUMBER, String(n)); }
+        show(n);
+      }
+    } else if (isOwner && xhr.status === 404) {
+      show(0); // nobody has visited yet, so the counter does not exist on the server
+    }
+  };
+  xhr.send(null);
+})();
+//]]>
+</script>
 <h2>About Me</h2>
 <p>Hello! My name is Ryan Minghao Zhao, I recently recieved my B.A. in Economics and B.S. in Applied Mathematics from UC San Diego, I am currently a predoc at UCLA Anderson School of Management, my supervisor is Professor Ashvin Gandhi. </p>
 <p>I plan to pursue a Ph.D. in Economics specializing in Econometric theory and/or Health Economics, and
