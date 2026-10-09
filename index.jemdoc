@@ -17,14 +17,14 @@ Email: ryan.zhao@anderson.ucla.edu \n
      without clicking on the page, and private windows never remember it. A visit opened from a bookmark
      to the ?owner=on address is never counted. A small grey "(owner mode ...)" note under the counter means
      owner mode is on; no note means that visit was counted. ?owner=off turns it off. Previews from file://
-     or localhost are never counted. -->
+     or localhost are never counted, and neither are search-engine robots such as Googlebot. -->
 <p id="visitor-counter" style="visibility:hidden;text-align:center;font-size:1.4em;font-weight:bold;margin:1.2em 0 1em">Welcome! You are the <span id="visitor-count" style="display:inline-block;background:#000;color:#39ff14;font-family:'Courier New',Courier,monospace;font-weight:bold;font-size:1.15em;letter-spacing:0.2em;padding:0.05em 0.45em 0.05em 0.6em;border:2px solid #555;border-radius:4px;box-shadow:inset 0 0 6px #000,0 1px 3px rgba(0,0,0,0.5);text-shadow:0 0 6px #39ff14,0 0 14px rgba(57,255,20,0.6);vertical-align:middle">000000</span><span id="visitor-suffix">-th</span> visitor since Oct. 8th, 2026.<span id="visitor-note" style="display:block;color:#999;font-size:0.55em;font-weight:normal"></span></p>
 <script type="text/javascript">
 //<![CDATA[
 (function () {
   var API = 'https://abacus.jasoncameron.dev';
   var NAMESPACE = 'zhaominghao1.github.io';
-  var KEY = 'visitors';
+  var KEY = 'homepage';
   var OWNER_FLAG = 'visitorCounterOwner';      // localStorage: marks the owner's browsers
   var SESSION_NUMBER = 'visitorCounterNumber'; // sessionStorage: number already given to this visitor
 
@@ -52,6 +52,11 @@ Email: ryan.zhao@anderson.ucla.edu \n
                 /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
   var ownerSaved = load('localStorage', OWNER_FLAG) === '1';
   var isOwner = isLocal || ownerParam || ownerSaved;
+  // Search-engine robots (Googlebot, Google's URL Inspection tool, Bing, ...) run this page too.
+  // They are shown the total but never counted.
+  var isRobot = navigator.webdriver === true ||
+                /bot|crawl|spider|slurp|inspectiontool|googleother|lighthouse|headless/i.test(navigator.userAgent || '');
+  var readOnly = isOwner || isRobot;
 
   function pad6(n) { var s = String(n); while (s.length < 6) { s = '0' + s; } return s; }
   function ordinal(n) {
@@ -71,28 +76,32 @@ Email: ryan.zhao@anderson.ucla.edu \n
   }
 
   // A visitor keeps the same number for the whole browser session, so reloads are not counted again.
-  var remembered = isOwner ? 0 : parseInt(load('sessionStorage', SESSION_NUMBER), 10);
+  var remembered = readOnly ? 0 : parseInt(load('sessionStorage', SESSION_NUMBER), 10);
   if (remembered > 0) { show(remembered); return; }
 
-  // /hit adds one and returns the new total; /get (owner mode) only reads the current total.
+  // /hit adds one and returns the new total; /get (owner mode and robots) only reads the current total.
   // If the free service is busy (HTTP 429, nothing was counted), it tries once more after 11 seconds.
   var retried = false;
   function request() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', API + (isOwner ? '/get/' : '/hit/') + NAMESPACE + '/' + KEY, true);
+    xhr.open('GET', API + (readOnly ? '/get/' : '/hit/') + NAMESPACE + '/' + KEY, true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState !== 4) { return; }
       if (xhr.status === 200) {
         var n = null;
         try { n = JSON.parse(xhr.responseText).value; } catch (e) {}
         if (typeof n === 'number' && n >= 0) {
-          if (!isOwner) { save('sessionStorage', SESSION_NUMBER, String(n)); }
+          if (!readOnly) { save('sessionStorage', SESSION_NUMBER, String(n)); }
           show(n);
         }
       } else if (xhr.status === 429 && !retried) {
         retried = true;
-        window.setTimeout(request, 11000);
-      } else if (isOwner && xhr.status === 404) {
+        window.setTimeout(function () {
+          // If another page in this tab already counted this visitor, reuse that number instead.
+          var again = readOnly ? 0 : parseInt(load('sessionStorage', SESSION_NUMBER), 10);
+          if (again > 0) { show(again); } else { request(); }
+        }, 11000);
+      } else if (readOnly && xhr.status === 404) {
         show(0); // nobody has visited yet, so the counter does not exist on the server
       }
     };
