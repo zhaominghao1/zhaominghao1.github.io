@@ -8,12 +8,17 @@ Email: ryan.zhao@anderson.ucla.edu \n
 [CV.pdf CV] · [https://github.com/zhaominghao1 GitHub] \n
 ~~~
 
+# Keep this line and the blank line above it: jemdoc drops the line right after the photo block, and without a spare line here the counter code below would show up on the page as text.
 ~~~
 {}{raw}
 <!-- Visitor counter. Totals are kept by the free Abacus counting API (https://abacus.jasoncameron.dev).
-     Owner mode: open the page once with ?owner=on in each browser you use and your visits are no longer
-     counted there (?owner=off undoes it). Previews from file:// or localhost are never counted. -->
-<p id="visitor-counter" style="visibility:hidden;text-align:center;font-size:1.4em;font-weight:bold;margin:1.2em 0 1em">Welcome! You are the <span id="visitor-count" style="display:inline-block;background:#000;color:#39ff14;font-family:'Courier New',Courier,monospace;font-weight:bold;font-size:1.15em;letter-spacing:0.2em;padding:0.05em 0.45em 0.05em 0.6em;border:2px solid #555;border-radius:4px;box-shadow:inset 0 0 6px #000,0 1px 3px rgba(0,0,0,0.5);text-shadow:0 0 6px #39ff14,0 0 14px rgba(57,255,20,0.6);vertical-align:middle">000000</span><span id="visitor-suffix">-th</span> visitor since Oct. 7th, 2026.<span id="visitor-note" style="display:block;color:#999;font-size:0.55em;font-weight:normal"></span></p>
+     Owner mode: open https://zhaominghao1.github.io/?owner=on in a browser and your visits there stop counting.
+     That browser remembers it until its site data is cleared. Safari may also forget it if you go a while
+     without clicking on the page, and private windows never remember it. A visit opened from a bookmark
+     to the ?owner=on address is never counted. A small grey "(owner mode ...)" note under the counter means
+     owner mode is on; no note means that visit was counted. ?owner=off turns it off. Previews from file://
+     or localhost are never counted. -->
+<p id="visitor-counter" style="visibility:hidden;text-align:center;font-size:1.4em;font-weight:bold;margin:1.2em 0 1em">Welcome! You are the <span id="visitor-count" style="display:inline-block;background:#000;color:#39ff14;font-family:'Courier New',Courier,monospace;font-weight:bold;font-size:1.15em;letter-spacing:0.2em;padding:0.05em 0.45em 0.05em 0.6em;border:2px solid #555;border-radius:4px;box-shadow:inset 0 0 6px #000,0 1px 3px rgba(0,0,0,0.5);text-shadow:0 0 6px #39ff14,0 0 14px rgba(57,255,20,0.6);vertical-align:middle">000000</span><span id="visitor-suffix">-th</span> visitor since Oct. 8th, 2026.<span id="visitor-note" style="display:block;color:#999;font-size:0.55em;font-weight:normal"></span></p>
 <script type="text/javascript">
 //<![CDATA[
 (function () {
@@ -34,16 +39,19 @@ Email: ryan.zhao@anderson.ucla.edu \n
   }
 
   // Owner mode: ?owner=on remembers this browser as the owner's, ?owner=off forgets it.
+  // A visit whose address carries ?owner=on is never counted, even if the browser cannot store the flag.
+  var ownerParam = false;
   var m = /[?&]owner=([^&#]*)/.exec(window.location.search);
   if (m) {
-    var v = decodeURIComponent(m[1]).toLowerCase();
-    if (v === 'on' || v === '1' || v === 'yes' || v === 'true') { save('localStorage', OWNER_FLAG, '1'); }
+    var v = m[1].toLowerCase();
+    if (v === 'on' || v === '1' || v === 'yes' || v === 'true') { ownerParam = true; save('localStorage', OWNER_FLAG, '1'); }
     else if (v === 'off' || v === '0' || v === 'no' || v === 'false') { save('localStorage', OWNER_FLAG, null); }
     try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {}
   }
   var isLocal = window.location.protocol === 'file:' ||
                 /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
-  var isOwner = isLocal || load('localStorage', OWNER_FLAG) === '1';
+  var ownerSaved = load('localStorage', OWNER_FLAG) === '1';
+  var isOwner = isLocal || ownerParam || ownerSaved;
 
   function pad6(n) { var s = String(n); while (s.length < 6) { s = '0' + s; } return s; }
   function ordinal(n) {
@@ -54,7 +62,11 @@ Email: ryan.zhao@anderson.ucla.edu \n
   function show(n) {
     digits.textContent = pad6(n);
     suffix.textContent = ordinal(n);
-    if (isOwner) { note.textContent = ' (owner mode: this visit is not counted)'; }
+    if (isOwner) {
+      note.textContent = (ownerParam && !ownerSaved && !isLocal) ?
+        ' (owner mode: this visit is not counted, but this browser cannot remember owner mode)' :
+        ' (owner mode: this visit is not counted)';
+    }
     line.style.visibility = 'visible';
   }
 
@@ -63,22 +75,30 @@ Email: ryan.zhao@anderson.ucla.edu \n
   if (remembered > 0) { show(remembered); return; }
 
   // /hit adds one and returns the new total; /get (owner mode) only reads the current total.
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', API + (isOwner ? '/get/' : '/hit/') + NAMESPACE + '/' + KEY, true);
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState !== 4) { return; }
-    if (xhr.status === 200) {
-      var n = null;
-      try { n = JSON.parse(xhr.responseText).value; } catch (e) {}
-      if (typeof n === 'number' && n >= 0) {
-        if (!isOwner) { save('sessionStorage', SESSION_NUMBER, String(n)); }
-        show(n);
+  // If the free service is busy (HTTP 429, nothing was counted), it tries once more after 11 seconds.
+  var retried = false;
+  function request() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', API + (isOwner ? '/get/' : '/hit/') + NAMESPACE + '/' + KEY, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) { return; }
+      if (xhr.status === 200) {
+        var n = null;
+        try { n = JSON.parse(xhr.responseText).value; } catch (e) {}
+        if (typeof n === 'number' && n >= 0) {
+          if (!isOwner) { save('sessionStorage', SESSION_NUMBER, String(n)); }
+          show(n);
+        }
+      } else if (xhr.status === 429 && !retried) {
+        retried = true;
+        window.setTimeout(request, 11000);
+      } else if (isOwner && xhr.status === 404) {
+        show(0); // nobody has visited yet, so the counter does not exist on the server
       }
-    } else if (isOwner && xhr.status === 404) {
-      show(0); // nobody has visited yet, so the counter does not exist on the server
-    }
-  };
-  xhr.send(null);
+    };
+    xhr.send(null);
+  }
+  request();
 })();
 //]]>
 </script>
